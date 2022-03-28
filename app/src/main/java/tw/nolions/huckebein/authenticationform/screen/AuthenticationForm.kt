@@ -1,11 +1,8 @@
-package tw.nolions.huckebein.authenticationform
+package tw.nolions.huckebein.authenticationform.screen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
@@ -20,6 +17,8 @@ import androidx.compose.ui.semantics.text
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import tw.nolions.huckebein.authenticationform.*
+import tw.nolions.huckebein.authenticationform.R
 
 @Composable
 fun AuthenticationForm(
@@ -28,9 +27,11 @@ fun AuthenticationForm(
     email: String?,
     password: String?,
     completedPasswordRequirements: List<PasswordRequirements>,
+    enableAuthentication: Boolean,
     onEmailChanged: (email: String) -> Unit,
     onPasswordChanged: (password: String) -> Unit,
-    onAuthenticate: () -> Unit
+    onAuthenticate: () -> Unit,
+    onToggleMode: () -> Unit
 ) {
     Column(
         modifier = modifier,
@@ -70,15 +71,27 @@ fun AuthenticationForm(
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
-                AnimatedVisibility(
-                    visible = authenticationMode ==
-                            AuthenticationMode.SIGN_UP
-                ) {
-                    PasswordRequirementss(satisfiedRequirements = completedPasswordRequirements)
+                AnimatedVisibility(visible = authenticationMode == AuthenticationMode.SIGN_UP) {
+                    PasswordRequirements(satisfiedRequirements = completedPasswordRequirements)
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
 
+                AuthenticationButton(
+                    enableAuthentication = enableAuthentication,
+                    authenticationMode = authenticationMode,
+                    onAuthenticate = onAuthenticate
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                ToggleAuthenticationMode(
+                    modifier = Modifier.fillMaxWidth(),
+                    authenticationMode = authenticationMode,
+                    toggleAuthentication = {
+                        onToggleMode()
+                    }
+                )
             }
         }
     }
@@ -127,7 +140,7 @@ fun Requirement(
 }
 
 @Composable
-fun PasswordRequirementss(
+fun PasswordRequirements(
     modifier: Modifier = Modifier,
     satisfiedRequirements: List<PasswordRequirements>
 ) {
@@ -141,6 +154,34 @@ fun PasswordRequirementss(
                 ),
                 satisfied = satisfiedRequirements.contains(
                     requirement
+                )
+            )
+        }
+    }
+}
+
+@Composable
+fun ToggleAuthenticationMode(
+    modifier: Modifier = Modifier,
+    authenticationMode: AuthenticationMode,
+    toggleAuthentication: () -> Unit
+) {
+    Surface(
+        modifier = modifier.padding(top = 16.dp),
+        elevation = 8.dp
+    ) {
+        TextButton(
+            onClick = {
+                toggleAuthentication()
+            }
+        ) {
+            Text(
+                text = stringResource(
+                    if (authenticationMode == AuthenticationMode.SIGN_IN) {
+                        R.string.action_need_account
+                    } else {
+                        R.string.action_already_have_account
+                    }
                 )
             )
         }

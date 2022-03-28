@@ -15,7 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import tw.nolions.huckebein.authenticationform.screen.AuthenticationForm
 import tw.nolions.huckebein.authenticationform.ui.theme.AuthenticationFormTheme
+import tw.nolions.huckebein.authenticationform.viewModel.AuthenticationViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +72,7 @@ fun AuthenticationContent(
         authenticationMode = authenticationState.authenticationMode,
         email = authenticationState.email,
         password = authenticationState.password,
+        enableAuthentication = authenticationState.isFormValid(),
         completedPasswordRequirements = authenticationState.passwordRequirements,
         onEmailChanged = {
             handleEvent(AuthenticationEvent.EmailChanged(it))
@@ -79,9 +82,21 @@ fun AuthenticationContent(
         },
         onAuthenticate = {
             handleEvent(AuthenticationEvent.Authenticate)
+        },
+        onToggleMode = {
+            handleEvent(AuthenticationEvent.ToggleAuthenticationMode)
         }
-
     )
+
+    authenticationState.error?.let { error ->
+        AuthenticationErrorDialog(
+            error = error,
+            dismissError = {
+                handleEvent(
+                    AuthenticationEvent.ErrorDismissed)
+            }
+        )
+    }
 }
 
 @Preview(showBackground = true)

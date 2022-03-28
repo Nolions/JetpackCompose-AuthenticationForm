@@ -21,4 +21,11 @@
     <string name="password_requirement_needed">%s, needed</string>
     <string name="action_sign_up">Sign Up</string>
     <string name="action_sign_in">Sign In</string>
+
+    <string name="action_need_account">Need an account?</string>
+    <string name="action_already_have_account">Already have an account?</string>
+
+    <string name="error_title">Whoops</string>
+    <string name="error_action">OK</string>
+
 </resources>

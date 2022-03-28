@@ -1,4 +1,4 @@
-package tw.nolions.huckebein.authenticationform
+package tw.nolions.huckebein.authenticationform.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,6 +7,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import tw.nolions.huckebein.authenticationform.AuthenticationEvent
+import tw.nolions.huckebein.authenticationform.AuthenticationMode
+import tw.nolions.huckebein.authenticationform.AuthenticationState
+import tw.nolions.huckebein.authenticationform.screen.PasswordRequirements
 
 class AuthenticationViewModel : ViewModel() {
     val uiState = MutableStateFlow(AuthenticationState())
